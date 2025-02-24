@@ -92,6 +92,8 @@ export interface Settings {
     debugSettings: DebugSettings;
 
     loggingOptions: LogOptions;
+
+    alwaysGenerateIds: boolean
 }
 
 const defaultSettings: Settings = {
@@ -143,6 +145,8 @@ const defaultSettings: Settings = {
             'tasks.Task': 'info', // Task.ts
         },
     },
+
+    alwaysGenerateIds: false,
 };
 
 let settings: Settings = { ...defaultSettings };

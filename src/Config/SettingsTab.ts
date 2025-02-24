@@ -455,6 +455,17 @@ export class SettingsTab extends PluginSettingTab {
                     await this.plugin.saveSettings();
                 });
             });
+
+        new Setting(containerEl)
+            .setName(i18n.t('settings.alwaysGenerateIds.name'))
+            .setDesc(i18n.t('settings.alwaysGenerateIds.description'))
+            .addToggle((toggle) => {
+                const settings = getSettings();
+                toggle.setValue(settings.alwaysGenerateIds).onChange(async (value) => {
+                    updateSettings({ alwaysGenerateIds: value });
+                    await this.plugin.saveSettings();
+                });
+            });
     }
 
     private seeTheDocumentation(url: string) {

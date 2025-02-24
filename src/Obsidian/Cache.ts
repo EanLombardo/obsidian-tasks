@@ -11,6 +11,8 @@ import { Lazy } from '../lib/Lazy';
 import { Logger, logging } from '../lib/logging';
 import type { TasksEvents } from './TasksEvents';
 import { FileParser } from './FileParser';
+import { generateUniqueId } from 'Task/TaskDependency';
+import { replaceTaskWithTasks } from '../Obsidian/File';
 
 export enum State {
     Cold = 'Cold',
@@ -297,6 +299,28 @@ export class Cache {
 
         // All updated, inform our subscribers.
         this.notifySubscribers();
+
+        await this.maybeEmplaceIds(newTasks);
+    }
+
+    private async maybeEmplaceIds(newTasks: Task[]): Promise<void> {
+        const { alwaysGenerateIds } = getSettings();
+        if (!alwaysGenerateIds) {
+            return
+        }
+
+        var allTaskIds = this.tasks.map(task => task.id)
+        for (const task of newTasks) {
+            if (!task.id) {
+                const newId = generateUniqueId(allTaskIds)
+                const updatedTask = new Task({ ...task, id: newId });
+                allTaskIds.push(newId)
+                await replaceTaskWithTasks({
+                    originalTask: task,
+                    newTasks: DateFallback.removeInferredStatusIfNeeded(task, [updatedTask]),
+                });
+            }
+        }
     }
 
     private getTasksFromFileContent(

@@ -233,6 +233,10 @@
         "heading": "Custom Statuses"
       },
       "heading": "Task Statuses"
+    },
+    "alwaysGenerateIds" : {
+      "name" : "Always give tasks ids",
+      "description" : "Whenever a task changes they will be given an id. Some plugins need this for some features."
     }
   }
 }

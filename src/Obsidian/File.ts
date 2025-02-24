@@ -147,16 +147,18 @@ Recommendations:
 
         const timeout = Math.min(Math.pow(10, previousTries), 100); // 1, 10, 100, 100, 100, ...
         logger.debug(`timeout = ${timeout}`);
-        setTimeout(async () => {
-            await tryRepetitive({
-                originalTask,
-                newTasks,
-                vault,
-                metadataCache,
-                workspace,
-                previousTries: previousTries + 1,
-            });
-        }, timeout);
+        return new Promise(resolve => 
+            setTimeout(async () => {
+                await tryRepetitive({
+                    originalTask,
+                    newTasks,
+                    vault,
+                    metadataCache,
+                    workspace,
+                    previousTries: previousTries + 1,
+                });
+                resolve(null);
+        }, timeout));
     };
 
     try {
